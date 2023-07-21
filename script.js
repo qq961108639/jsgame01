@@ -55,5 +55,19 @@ btnHold.addEventListener('click', function () {
 
   document.getElementById(`score--${activePlayer}`).textContent =
     scores[activePlayer];
-  switchPlayer();
+
+  //2.检查玩家的分数是否超过一百
+  if (scores[activePlayer] >= 20) {
+    //finish the game
+    document
+      .querySelector(`.player--${activePlayer}`)
+      .classList.add('player--winner');
+    document
+      .querySelector(`.player--${activePlayer}`)
+      .classList.remove('player--active');
+  } else {
+    switchPlayer();
+  }
 });
+
+//完成
