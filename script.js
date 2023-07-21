@@ -15,9 +15,11 @@ score0El.textContent = 0;
 score1El.textContent = 0;
 diceEl.classList.add('hidden');
 
+//变量 NOTE:
 const scores = [0, 0];
 let currentScore = 0;
 let activePlayer = 0;
+let playing = true;
 
 //Switchplayer
 const switchPlayer = function () {
@@ -33,40 +35,47 @@ const switchPlayer = function () {
 //rolling dice funtionlity
 
 btnRoll.addEventListener('click', function () {
-  //1.generating a rondom dice roll
-  const dice = Math.trunc(Math.random() * 6) + 1;
-  console.log(dice);
-  //2.display dice
-  diceEl.classList.remove('hidden');
-  diceEl.src = `dice-${dice}.png`;
-  //3.Check for rolled
-  if (dice !== 1) {
-    //add dice to current score
-    currentScore += dice;
-    document.getElementById(`current--${activePlayer}`).textContent =
-      currentScore;
-  } else {
-    switchPlayer();
+  if (playing) {
+    //1.generating a rondom dice roll
+    const dice = Math.trunc(Math.random() * 6) + 1;
+    console.log(dice);
+    //2.display dice
+    diceEl.classList.remove('hidden');
+    diceEl.src = `dice-${dice}.png`;
+    //3.Check for rolled
+    if (dice !== 1) {
+      //add dice to current score
+      currentScore += dice;
+      document.getElementById(`current--${activePlayer}`).textContent =
+        currentScore;
+    } else {
+      switchPlayer();
+    }
   }
 });
 
 btnHold.addEventListener('click', function () {
-  scores[activePlayer] += currentScore;
+  if (playing) {
+    scores[activePlayer] += currentScore;
 
-  document.getElementById(`score--${activePlayer}`).textContent =
-    scores[activePlayer];
+    document.getElementById(`score--${activePlayer}`).textContent =
+      scores[activePlayer];
 
-  //2.检查玩家的分数是否超过一百
-  if (scores[activePlayer] >= 20) {
-    //finish the game
-    document
-      .querySelector(`.player--${activePlayer}`)
-      .classList.add('player--winner');
-    document
-      .querySelector(`.player--${activePlayer}`)
-      .classList.remove('player--active');
-  } else {
-    switchPlayer();
+    //2.检查玩家的分数是否超过一百
+    if (scores[activePlayer] >= 20) {
+      //finish the game
+      //大于20 完成游戏
+      playing = false;
+      diceEl.classList.add('hidden');
+      document
+        .querySelector(`.player--${activePlayer}`)
+        .classList.add('player--winner');
+      document
+        .querySelector(`.player--${activePlayer}`)
+        .classList.remove('player--active');
+    } else {
+      switchPlayer();
+    }
   }
 });
 
